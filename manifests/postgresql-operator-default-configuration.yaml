@@ -20,8 +20,8 @@ configuration:
   kubernetes:
     cluster_domain: cluster.local
     cluster_labels:
-        application: spilo
-    cluster_name_label: cluster-name
+      application: spilo
+    cluster_name_label: version
     enable_pod_antiaffinity: false
     enable_pod_disruption_budget: true
     # infrastructure_roles_secret_name: postgresql-operator
@@ -29,20 +29,21 @@ configuration:
     # - application
     # - environment
     # node_readiness_label:
-    # - status:ready
+    #   status: ready
     oauth_token_secret_name: postgresql-operator
     pdb_name_format: "postgres-{cluster}-pdb"
     pod_antiaffinity_topology_key: "kubernetes.io/hostname"
     # pod_environment_configmap: ""
     pod_management_policy: "ordered_ready"
     pod_role_label: spilo-role
-    pod_service_account_name: operator
+    pod_service_account_name: zalando-postgres-operator
     pod_terminate_grace_period: 5m
-    secret_name_template: "{username}.{cluster}.credentials.{tprkind}.{tprgroup}"
+    secret_name_template: "{username}.{cluster}.credentials"
     # spilo_fsgroup: 103
     spilo_privileged: false
-    # toleration: {}
-    # watched_namespace: ""
+    # toleration:
+    #   postgres: "key:postgres,operator:Exists,effect:NoSchedule"
+    watched_namespace: "*"
   postgres_pod_resources:
     default_cpu_limit: "3"
     default_cpu_request: 100m
@@ -56,14 +57,14 @@ configuration:
     resource_check_interval: 3s
     resource_check_timeout: 10m
   load_balancer:
-    # db_hosted_zone: ""
-    enable_master_load_balancer: false
+    db_hosted_zone: db.example.com
+    enable_master_load_balancer: true
     enable_replica_load_balancer: false
     # custom_service_annotations:
     #   keyx: valuex
     #   keyy: valuey
-    master_dns_name_format: "{cluster}.{team}.{hostedzone}"
-    replica_dns_name_format: "{cluster}-repl.{team}.{hostedzone}"
+    master_dns_name_format: "{cluster}.{team}.staging.{hostedzone}"
+    replica_dns_name_format: "{cluster}-repl.{team}.staging.{hostedzone}"
   aws_or_gcp:
     # additional_secret_mount: "some-secret-name"
     # additional_secret_mount_path: "/some/dir"

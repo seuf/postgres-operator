@@ -12,6 +12,7 @@ require (
 	k8s.io/api v0.0.0-20190927115716-5d581ce610b0
 	k8s.io/apiextensions-apiserver v0.0.0-20190927042040-728319705b32
 	k8s.io/apimachinery v0.0.0-20190927035529-0104e33c351d
-	k8s.io/client-go v0.0.0-20190926235751-95884bf844a9
+	k8s.io/client-go v11.0.0+incompatible
 	k8s.io/code-generator v0.0.0-20190927075303-016f2b3d74d0
+	sigs.k8s.io/kind v0.5.1 // indirect
 )
