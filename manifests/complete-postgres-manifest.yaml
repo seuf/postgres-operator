@@ -29,7 +29,7 @@ spec:
 # Expert section
 
   enableShmVolume: true
-  spiloFSGroup: 103
+#  spiloFSGroup: 103
   postgresql:
     version: "11"
     parameters:
