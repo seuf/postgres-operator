@@ -135,9 +135,9 @@ configLoadBalancer:
   # toggles service type load balancer pointing to the replica pod of the cluster
   enable_replica_load_balancer: "false"
   # defines the DNS name string template for the master load balancer cluster
-  master_dns_name_format: '{cluster}.{team}.staging.{hostedzone}'
+  master_dns_name_format: '{cluster}.{team}.{hostedzone}'
   # defines the DNS name string template for the replica load balancer cluster
-  replica_dns_name_format: '{cluster}-repl.{team}.staging.{hostedzone}'
+  replica_dns_name_format: '{cluster}-repl.{team}.{hostedzone}'
 
 # options to aid debugging of the operator itself
 configDebug:

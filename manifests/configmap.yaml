@@ -37,7 +37,7 @@ data:
   # logical_backup_docker_image: "registry.opensource.zalan.do/acid/logical-backup"
   # logical_backup_s3_bucket: "my-bucket-url"
   # logical_backup_schedule: "30 00 * * *"
-  master_dns_name_format: '{cluster}.{team}.staging.{hostedzone}'
+  master_dns_name_format: '{cluster}.{team}.{hostedzone}'
   # master_pod_move_timeout: 10m
   # max_instances: "-1"
   # min_instances: "-1"
@@ -60,7 +60,7 @@ data:
   ready_wait_interval: 3s
   ready_wait_timeout: 30s
   repair_period: 5m
-  replica_dns_name_format: '{cluster}-repl.{team}.staging.{hostedzone}'
+  replica_dns_name_format: '{cluster}-repl.{team}.{hostedzone}'
   replication_username: standby
   resource_check_interval: 3s
   resource_check_timeout: 10m

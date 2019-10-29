@@ -38,7 +38,7 @@ configuration:
     pod_role_label: spilo-role
     pod_service_account_name: zalando-postgres-operator
     pod_terminate_grace_period: 5m
-    secret_name_template: "{username}.{cluster}.credentials"
+    secret_name_template: "{username}.{cluster}.credentials.{tprkind}.{tprgroup}"
     # spilo_fsgroup: 103
     spilo_privileged: false
     # toleration:
@@ -63,8 +63,8 @@ configuration:
     # custom_service_annotations:
     #   keyx: valuex
     #   keyy: valuey
-    master_dns_name_format: "{cluster}.{team}.staging.{hostedzone}"
-    replica_dns_name_format: "{cluster}-repl.{team}.staging.{hostedzone}"
+    master_dns_name_format: "{cluster}.{team}.{hostedzone}"
+    replica_dns_name_format: "{cluster}-repl.{team}.{hostedzone}"
   aws_or_gcp:
     # additional_secret_mount: "some-secret-name"
     # additional_secret_mount_path: "/some/dir"
