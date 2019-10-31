@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
+	acidzalando "github.com/zalando/postgres-operator/pkg/apis/acid.zalan.do"
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -110,14 +110,31 @@ var minDisable = -1.0
 // PostgresCRDResourceValidation to check applied manifest parameters
 var PostgresCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 	Type:     "object",
-	Required: []string{"spec"},
+	Required: []string{"kind", "apiVersion", "spec"},
 	Properties: map[string]apiextv1beta1.JSONSchemaProps{
+		"kind": {
+			Type: "string",
+			Enum: []apiextv1beta1.JSON{
+				{
+					Raw: []byte(`"postgresql"`),
+				},
+			},
+		},
+		"apiVersion": {
+			Type: "string",
+			Enum: []apiextv1beta1.JSON{
+				{
+					Raw: []byte(`"acid.zalan.do/v1"`),
+				},
+			},
+		},
 		"spec": {
 			Type:     "object",
 			Required: []string{"numberOfInstances", "teamId", "postgresql"},
 			Properties: map[string]apiextv1beta1.JSONSchemaProps{
 				"allowedSourceRanges": {
-					Type: "array",
+					Type:     "array",
+					Nullable: true,
 					Items: &apiextv1beta1.JSONSchemaPropsOrArray{
 						Schema: &apiextv1beta1.JSONSchemaProps{
 							Type:    "string",
@@ -181,6 +198,29 @@ var PostgresCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 				},
 				"enableShmVolume": {
 					Type: "boolean",
+				},
+				"init_containers": {
+					Type:        "array",
+					Description: "Deprecated",
+					Items: &apiextv1beta1.JSONSchemaPropsOrArray{
+						Schema: &apiextv1beta1.JSONSchemaProps{
+							Type: "object",
+							AdditionalProperties: &apiextv1beta1.JSONSchemaPropsOrBool{
+								Allows: true,
+							},
+						},
+					},
+				},
+				"initContainers": {
+					Type: "array",
+					Items: &apiextv1beta1.JSONSchemaPropsOrArray{
+						Schema: &apiextv1beta1.JSONSchemaProps{
+							Type: "object",
+							AdditionalProperties: &apiextv1beta1.JSONSchemaPropsOrBool{
+								Allows: true,
+							},
+						},
+					},
 				},
 				"logicalBackupSchedule": {
 					Type:    "string",
@@ -330,6 +370,17 @@ var PostgresCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 									Description: "Plain integer or fixed-point integer using one of these suffixes: E, P, T, G, M, k (with or without a tailing i). Must be greater than 0",
 									Pattern:     "^(\\d+(e\\d+)?|\\d+(\\.\\d+)?(e\\d+)?[EPTGMK]i?)$",
 								},
+							},
+						},
+					},
+				},
+				"sidecars": {
+					Type: "array",
+					Items: &apiextv1beta1.JSONSchemaPropsOrArray{
+						Schema: &apiextv1beta1.JSONSchemaProps{
+							Type: "object",
+							AdditionalProperties: &apiextv1beta1.JSONSchemaPropsOrBool{
+								Allows: true,
 							},
 						},
 					},
@@ -524,14 +575,29 @@ var PostgresCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 // OperatorConfigCRDResourceValidation to check applied manifest parameters
 var OperatorConfigCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 	Type:     "object",
-	Required: []string{"configuration"},
+	Required: []string{"kind", "apiVersion", "configuration"},
 	Properties: map[string]apiextv1beta1.JSONSchemaProps{
+		"kind": {
+			Type: "string",
+			Enum: []apiextv1beta1.JSON{
+				{
+					Raw: []byte(`"OperatorConfiguration"`),
+				},
+			},
+		},
+		"apiVersion": {
+			Type: "string",
+			Enum: []apiextv1beta1.JSON{
+				{
+					Raw: []byte(`"acid.zalan.do/v1"`),
+				},
+			},
+		},
 		"configuration": {
 			Type: "object",
 			Properties: map[string]apiextv1beta1.JSONSchemaProps{
 				"etcd_host": {
-					Type:     "string",
-					Nullable: true,
+					Type: "string",
 				},
 				"docker_image": {
 					Type: "string",
@@ -663,8 +729,7 @@ var OperatorConfigCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 							},
 						},
 						"watched_namespace": {
-							Type:     "string",
-							Nullable: true,
+							Type: "string",
 						},
 					},
 				},
@@ -808,8 +873,7 @@ var OperatorConfigCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 							Type: "string",
 						},
 						"postgres_superuser_teams": {
-							Type:     "array",
-							Nullable: true,
+							Type: "array",
 							Items: &apiextv1beta1.JSONSchemaPropsOrArray{
 								Schema: &apiextv1beta1.JSONSchemaProps{
 									Type: "string",
@@ -817,8 +881,7 @@ var OperatorConfigCRDResourceValidation = apiextv1beta1.JSONSchemaProps{
 							},
 						},
 						"protected_role_names": {
-							Type:     "array",
-							Nullable: true,
+							Type: "array",
 							Items: &apiextv1beta1.JSONSchemaPropsOrArray{
 								Schema: &apiextv1beta1.JSONSchemaProps{
 									Type: "string",
