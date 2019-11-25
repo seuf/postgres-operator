@@ -69,6 +69,11 @@ Variable names are underscore-separated words.
 
 Those are top-level keys, containing both leaf keys and groups.
 
+* **enable_crd_validation**
+  toggles if the operator will create or update CRDs with
+  [OpenAPI v3 schema validation](https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/#validation)
+  The default is `true`.
+
 * **etcd_host**
   Etcd connection string for Patroni defined as `host:port`. Not required when
   Patroni native Kubernetes support is used. The default is empty (use
@@ -438,6 +443,19 @@ grouped under the `logical_backup` key.
 * **logical_backup_s3_bucket**
   S3 bucket to store backup results. The bucket has to be present and
   accessible by Postgres pods. Default: empty.
+
+* **logical_backup_s3_endpoint**
+  When using non-AWS S3 storage, endpoint can be set as a ENV variable.
+
+* **logical_backup_s3_sse**
+  Specify server side encription that S3 storage is using. If empty string
+  is specified, no argument will be passed to `aws s3` command. Default: "AES256".
+
+* **logical_backup_s3_access_key_id**
+  When set, value will be in AWS_ACCESS_KEY_ID env variable. The Default is empty.
+
+* **logical_backup_s3_secret_access_key**
+  When set, value will be in AWS_SECRET_ACCESS_KEY env variable. The Default is empty.
 
 ## Debugging the operator
 

@@ -14,6 +14,7 @@ spec:
   scope: Namespaced
   subresources:
     status: {}
+  version: v1
   validation:
     openAPIV3Schema:
       type: object
@@ -103,6 +104,9 @@ spec:
                   type: string
                 pod_management_policy:
                   type: string
+                  enum:
+                    - "ordered_ready"
+                    - "parallel"
                 pod_role_label:
                   type: string
                 pod_service_account_name:
@@ -259,5 +263,3 @@ spec:
                   pattern: '^(\d+(e\d+)?|\d+(\.\d+)?(e\d+)?[EPTGMK]i?)$'
                 scalyr_server_url:
                   type: string
-
-  version: v1
