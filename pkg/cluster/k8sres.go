@@ -493,7 +493,7 @@ func generatePodTemplate(
 		Spec: podSpec,
 	}
 	if kubeIAMRole != "" {
-		if template.Annotations == nil{
+		if template.Annotations == nil {
 			template.Annotations = make(map[string]string)
 		}
 		template.Annotations[constants.KubeIAmAnnotation] = kubeIAMRole
@@ -967,7 +967,7 @@ func (c *Cluster) generatePodAnnotations(spec *acidv1.PostgresSpec) map[string]s
 			annotations[k] = v
 		}
 	}
-	
+
 	if len(annotations) == 0 {
 		return nil
 	}
@@ -1508,8 +1508,8 @@ func (c *Cluster) generateLogicalBackupJob() (*batchv1beta1.CronJob, error) {
 		util.False(),
 		false,
 		"",
-		"",
-		""); err != nil {
+		c.OpConfig.AdditionalSecretMount,
+		c.OpConfig.AdditionalSecretMountPath); err != nil {
 		return nil, fmt.Errorf("could not generate pod template for logical backup pod: %v", err)
 	}
 
@@ -1558,6 +1558,10 @@ func (c *Cluster) generateLogicalBackupPodEnvVars() []v1.EnvVar {
 			Value: c.Name,
 		},
 		{
+			Name:  "CLUSTER_NAME_LABEL",
+			Value: c.OpConfig.ClusterNameLabel,
+		},
+		{
 			Name: "POD_NAMESPACE",
 			ValueFrom: &v1.EnvVarSource{
 				FieldRef: &v1.ObjectFieldSelector{
@@ -1570,6 +1574,14 @@ func (c *Cluster) generateLogicalBackupPodEnvVars() []v1.EnvVar {
 		{
 			Name:  "LOGICAL_BACKUP_S3_BUCKET",
 			Value: c.OpConfig.LogicalBackup.LogicalBackupS3Bucket,
+		},
+		{
+			Name:  "LOGICAL_BACKUP_S3_ENDPOINT",
+			Value: c.OpConfig.LogicalBackup.LogicalBackupS3Endpoint,
+		},
+		{
+			Name:  "AWS_SSE",
+			Value: c.OpConfig.LogicalBackup.LogicalBackupS3SSE,
 		},
 		{
 			Name:  "LOGICAL_BACKUP_S3_BUCKET_SCOPE_SUFFIX",
@@ -1609,8 +1621,15 @@ func (c *Cluster) generateLogicalBackupPodEnvVars() []v1.EnvVar {
 		},
 	}
 
-	c.logger.Debugf("Generated logical backup env vars %v", envVars)
+	if c.OpConfig.LogicalBackup.LogicalBackupS3AccessKeyID != "" {
+		envVars = append(envVars, v1.EnvVar{Name: "AWS_ACCESS_KEY_ID", Value: c.OpConfig.LogicalBackup.LogicalBackupS3AccessKeyID})
+	}
 
+	if c.OpConfig.LogicalBackup.LogicalBackupS3SecretAccessKey != "" {
+		envVars = append(envVars, v1.EnvVar{Name: "AWS_SECRET_ACCESS_KEY", Value: c.OpConfig.LogicalBackup.LogicalBackupS3SecretAccessKey})
+	}
+
+	c.logger.Debugf("Generated logical backup env vars %v", envVars)
 	return envVars
 }
 
