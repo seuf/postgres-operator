@@ -33,7 +33,7 @@ configuration:
     # - application
     # - environment
     # node_readiness_label:
-    #   status: ready
+    # - status:ready
     oauth_token_secret_name: postgresql-operator
     pdb_name_format: "postgres-{cluster}-pdb"
     pod_antiaffinity_topology_key: "kubernetes.io/hostname"
@@ -62,7 +62,7 @@ configuration:
     resource_check_timeout: 10m
   load_balancer:
     db_hosted_zone: db.example.com
-    enable_master_load_balancer: true
+    enable_master_load_balancer: false
     enable_replica_load_balancer: false
     # custom_service_annotations:
     #   keyx: valuex
