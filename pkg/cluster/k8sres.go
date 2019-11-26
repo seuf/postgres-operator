@@ -1580,7 +1580,7 @@ func (c *Cluster) generateLogicalBackupPodEnvVars() []v1.EnvVar {
 			Value: c.OpConfig.LogicalBackup.LogicalBackupS3Endpoint,
 		},
 		{
-			Name:  "AWS_SSE",
+			Name:  "LOGICAL_BACKUP_S3_SSE",
 			Value: c.OpConfig.LogicalBackup.LogicalBackupS3SSE,
 		},
 		{
